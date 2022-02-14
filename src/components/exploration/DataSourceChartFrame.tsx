@@ -136,21 +136,21 @@ function formatTodayValue(dataSource: DataSourceType, todayData: number | [numbe
 
     switch (dataSource) {
 
-//         default: info.label = "Today"
-//             break;
+        default: info.label = "Today"
+            break;
     }
 
     switch (dataSource) {
-//         case DataSourceType.StepCount:
-//             info.formatted = todayData != null ? [
-//                 {
-//                     text: commaNumber(todayData as number),
-//                     type: 'value',
-//                 },
-//                 { text: ' steps', type: 'unit' },
-//             ] : null
-//
-//             break;
+        case DataSourceType.StepCount:
+            info.formatted = todayData != null ? [
+                {
+                    text: commaNumber(todayData as number),
+                    type: 'value',
+                },
+                { text: ' mg/dL', type: 'unit' },
+            ] : null
+
+            break;
     }
     //console.log("%%%%%%%%%%%%%%%%%%%%%5");
     //console.log(info);

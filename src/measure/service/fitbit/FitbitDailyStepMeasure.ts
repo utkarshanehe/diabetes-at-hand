@@ -59,6 +59,9 @@ async createTableAndInsertRows(): any {
 
        await (await this.open()).executeSql('CREATE TABLE IF NOT EXISTS blood_glucose_level(day_of_week INTEGER, month INTEGER, numberedDate DATE, value INTEGER, year INTEGER)', []);
 
+//         await (await this.open()).executeSql('INSERT INTO blood_glucose_level ( day_of_week, month, numberedDate, value, year) VALUES (?,?,?,?,?)',
+//                                                                                          [ 1, 1, 20220214, 116, 2022]);
+
         const [result] = await (await this.open()).executeSql('select day_of_week as dayOfWeek, month, numberedDate, value, year from blood_glucose_level', []);
 
         if (result.rows.length <= 0)
