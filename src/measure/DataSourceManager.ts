@@ -16,11 +16,17 @@ export class DataSourceManager {
 
   readonly supportedDataSources: ReadonlyArray<DataSourceSpec> = [
 
+//     {
+//       type: DataSourceType.StepCount,
+//       category: DataSourceCategory.Step,
+//       name: "Step Count",
+//       description: 'Step Count Walked',
+//     },
     {
-      type: DataSourceType.StepCount,
-      category: DataSourceCategory.Step,
-      name: "Blood Glucose",
-      description: 'Step Count Walked',
+          type: DataSourceType.BloodGlucose,
+          category: DataSourceCategory.BloodGlucose,
+          name: "Blood Glucose",
+          description: 'Blood Glucose Level',
     },
     /*{
       type: DataSourceType.HeartRate,
@@ -76,6 +82,12 @@ export class DataSourceManager {
       category: DataSourceCategory.Step,
       name: "Step"
     }
+
+    this.dataSourceCategorySpecs[DataSourceCategory.BloodGlucose] = {
+      category: DataSourceCategory.BloodGlucose,
+      name: "Blood Glucose"
+    }
+
     /*this.dataSourceCategorySpecs[DataSourceCategory.Sleep] = {
       category: DataSourceCategory.Sleep,
       name: "Sleep"
@@ -92,8 +104,11 @@ export class DataSourceManager {
     }
 
     this.specMap = new Map<DataSourceType, DataSourceSpec>();
+    console.log("!!! In DataSourceManager.ts - adding entries in specMap = ");
     this.supportedDataSources.forEach(spec => {
       this.specMap.set(spec.type, spec)
+      console.log("!!! In DataSourceManager.ts - spec = ", spec);
+      console.log("!!! In DataSourceManager.ts - spec.type = ", spec.type);
     });
 
   }

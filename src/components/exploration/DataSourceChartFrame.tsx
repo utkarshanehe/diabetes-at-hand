@@ -147,6 +147,16 @@ function formatTodayValue(dataSource: DataSourceType, todayData: number | [numbe
                     text: commaNumber(todayData as number),
                     type: 'value',
                 },
+                { text: ' steps', type: 'unit' },
+            ] : null
+
+            break;
+        case DataSourceType.BloodGlucose:
+            info.formatted = todayData != null ? [
+                {
+                    text: commaNumber(todayData as number),
+                    type: 'value',
+                },
                 { text: ' mg/dL', type: 'unit' },
             ] : null
 
@@ -175,11 +185,19 @@ function formatStatistics(sourceType: DataSourceType, statisticsType: Statistics
                 case "avg": return commaNumber(Math.round(value));
                 case "range": return commaNumber(value[0]) + " - " + commaNumber(value[1])
                 case "total": return commaNumber(value)
+            break;
 
 //                 case "avg": return avg_value;
 //                 case "range": return range_start + " - " + range_end
 //                 case "total": return sum
 
+            }
+        case DataSourceType.BloodGlucose:
+            switch (statisticsType) {
+                case "avg": return commaNumber(Math.round(value));
+                case "range": return commaNumber(value[0]) + " - " + commaNumber(value[1])
+                case "total": return commaNumber(value)
+                break;
             }
        }
 }
@@ -333,7 +351,7 @@ function getChartView(sourceType: DataSourceType, data: OverviewSourceRow, query
                      dataSource={DataSourceType.HeartRate}/>*/
      return <DailyBarChart
                {...commonP}
-               dataSource={DataSourceType.StepCount}
+               dataSource={DataSourceType.BloodGlucose}
                valueTickFormat={(tick: number) => { return (tick % 1000 === 0 && tick != 0) ? tick / 1000 + "k" : commaNumber(tick) }} />
 
 
@@ -359,6 +377,8 @@ export const DataSourceChartFrame = React.memo((props: {
 
 
     const spec = DataSourceManager.instance.getSpec(props.data.source)
+    console.log("~~~ In DataSourceChartFrame.tsx - props.data.source = ", props.data.source);
+    console.log("~~~ In DataSourceChartFrame.tsx - spec = ", spec);
 
     const measureUnitType = useSelector((appState: ReduxAppState) => appState.settingsState.unit)
 
@@ -366,7 +386,7 @@ export const DataSourceChartFrame = React.memo((props: {
         [props.data.source, props.data.today, measureUnitType])
 
     //console.log("((((((((((((((((((((((((((((((())))))))))))))))))))))))))))))) ", getChartView(spec.type, props.data, props.filter, props.highlightedDays));
-
+    console.log("&*&*&* In DataSourceChartFrame.tsx props.data.statistics = ", props.data.statistics);
     return <View style={props.flat === true ? styles.containerStyleFlat : styles.containerStyle}>
         {props.showHeader !== false ?
             <View style={styles.headerStyle}>
@@ -395,12 +415,23 @@ export const DataSourceChartFrame = React.memo((props: {
             getChartView(spec.type, props.data, props.filter, props.highlightedDays)
         }
         <View style={styles.footerStyle}>{
-            props.data.statistics && props.data.statistics.map(stat => {
-                return <Text key={stat.type} style={styles.statValueStyle}>
-                    <Text style={styles.statLabelStyle}>{getStatisticsLabel(stat.type) + " "}</Text>
-                    <Text>{stat.value != null && (typeof stat.value == "number" || (stat.value[0] != null && stat.value[1] != null)) ? formatStatistics(props.data.source, stat.type, measureUnitType, stat.value) : "no value"}</Text>
-                </Text>
-            })
+            props.data.statistics && props.data.statistics.map(
+            function(stat) {
+                if (stat.type != "total")
+                {
+                    return <Text key={stat.type} style={styles.statValueStyle}>
+                        <Text style={styles.statLabelStyle}>{getStatisticsLabel(stat.type) + " "}</Text>
+                        <Text>{stat.value != null && (typeof stat.value == "number" || (stat.value[0] != null && stat.value[1] != null)) ? formatStatistics(props.data.source, stat.type, measureUnitType, stat.value) : "no value"}</Text>
+                    </Text>
+                }
+            }
+//             stat => {
+//                 return <Text key={stat.type} style={styles.statValueStyle}>
+//                     <Text style={styles.statLabelStyle}>{getStatisticsLabel(stat.type) + " "}</Text>
+//                     <Text>{stat.value != null && (typeof stat.value == "number" || (stat.value[0] != null && stat.value[1] != null)) ? formatStatistics(props.data.source, stat.type, measureUnitType, stat.value) : "no value"}</Text>
+//                 </Text>
+//             }
+)
         }
         </View>
     </View >

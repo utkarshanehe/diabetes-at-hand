@@ -524,18 +524,25 @@ class ExplorationScreen extends React.PureComponent<ExplorationProps, State> {
     makeMainPanel(type: ExplorationType): any {
         switch (type) {
             case ExplorationType.B_Overview:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.B_Overview ");
                 return <OverviewMainPanel />
             case ExplorationType.B_Range:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.B_Range ");
                 return <DataSourceDetailNavigationPanel />
             case ExplorationType.B_Day:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.B_Day ");
                 return getIntraDayMainPanel(this.props.loadedDataInfo)
             case ExplorationType.C_Cyclic:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.C_Cyclic ");
                 return <CyclicComparisonMainPanel />
             case ExplorationType.C_TwoRanges:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.C_TwoRanges ");
                 return <MultiRangeComparisonMainPanel />
             case ExplorationType.C_CyclicDetail_Range:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.C_CyclicDetail_Range ");
                 return <MultiRangeComparisonMainPanel noDataMessageOverride={`No data exist. Please check whether the current range includes <b>${getCycleDimensionSpec(explorationInfoHelper.getParameterValue(this.props.loadedDataInfo, ParameterType.CycleDimension)).name}</b>.`} />
             case ExplorationType.C_CyclicDetail_Daily:
+                console.log("&&& In ExplorationScreen.tsx - makeMainPanel() - in the case of ExplorationType.C_CyclicDetail_Daily ");
                 return <FilteredDatesChartMainPanel />
         }
     }

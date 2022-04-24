@@ -51,6 +51,9 @@ export abstract class FitbitSummaryLogMeasure<
        const boxPlotInfo = await this.getBoxPlotInfoOfDataset()
 
        let statistics
+
+       console.log("@#@#@# In FitbitSummaryLogMeasure.ts - fetchPreliminaryBloodGlucoseData() - includeStatistics =  ", includeStatistics);
+
        if (includeStatistics === true) {
          statistics = await this.core.fitbitLocalDbManager.getAggregatedValue('blood_glucose_level', [
            {type: SQLiteHelper.AggregationType.AVG, aggregatedColumnName: 'value', as: 'avg'},
@@ -59,6 +62,11 @@ export abstract class FitbitSummaryLogMeasure<
            {type: SQLiteHelper.AggregationType.SUM, aggregatedColumnName: 'value', as: 'sum'},
          ], condition, params)
        }
+       else {
+        console.log("@$@$@$ In FitbitSummaryLogMeasure.ts - fetchPreliminaryBloodGlucoseData() - includeStatistics = false, so reached in else part ", );
+       }
+
+       console.log("@#@#@# In FitbitSummaryLogMeasure.ts - fetchPreliminaryBloodGlucoseData() - statistics =  ", statistics);
 
        return Promise.resolve({
          list,
@@ -144,14 +152,17 @@ export abstract class FitbitSummaryLogMeasure<
   }
 
   async fetchCyclicGroupedData(start: number, end: number, cycleType: CyclicTimeFrame): Promise<GroupedData> {
-    const result = await this.core.fitbitLocalDbManager.selectQuery(makeCyclicGroupQuery(this.dbTableName, start, end, cycleType))
+    const result = await this.core.fitbitLocalDbManager.selectQuery(makeCyclicGroupQuery('blood_glucose_level', start, end, cycleType))
     return {
       data: result as any
     }
   }
 
   async fetchRangeGroupedData(start: number, end: number): Promise<IAggregatedValue> {
+    console.log("^^^^^^ In FitbitSummaryLogMeasure.ts reached in fetchRangeGroupedData()");
     const result = await this.core.fitbitLocalDbManager.selectQuery(makeAggregatedQuery(this.dbTableName, start, end))
+    console.log("^^^^^^ In FitbitSummaryLogMeasure.ts reached in fetchRangeGroupedData() this.dbTableName = ", this.dbTableName);
+    console.log("^^^^^^ In FitbitSummaryLogMeasure.ts reached in fetchRangeGroupedData() result = ", result);
     if (result.length > 0) {
       return result[0] as any
     } else return null
